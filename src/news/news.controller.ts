@@ -6,8 +6,8 @@ import { NewsService } from './news.service';
 export class NewsController {
   constructor(public serv: NewsService) {}
   @Get()
-  getNews(@Query() query: any): Observable<any> {
-    const yo = {q:'esports'};
-    return this.serv.getNews(yo);
+  getNews(@Query('q') search: any): Observable<any> {
+    const query = { q: search };
+    return this.serv.getNews(query);
   }
 }
