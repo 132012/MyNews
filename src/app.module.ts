@@ -22,8 +22,4 @@ import { AuthMiddleware } from './auth/auth.middleware';
   controllers: [AppController, NewsController],
   providers: [AppService, NewsService],
 })
-export class AppModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes('saved-articles');
-  }
-}
+export class AppModule {}

@@ -4,11 +4,13 @@ const SavedArticleSchema = new mongoose.Schema({
   title: { type: String },
   urlToImage: { type: String },
   notes: { type: String },
+  url: { type: String },
 });
 
 export interface SavedArticleDocument extends mongoose.Document {
   title: string;
   urlToImage: string;
+  url?: string;
   notes?: string;
 }
 
