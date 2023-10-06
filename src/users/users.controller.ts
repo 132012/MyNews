@@ -18,7 +18,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post('register')
-  async register(@Body() user: User): Promise<User> {
+  async register(@Body() user: User): Promise<any> {
     const existingUser = await this.usersService.findOne(user.username);
     if (existingUser) {
       throw new HttpException(
@@ -26,12 +26,15 @@ export class UsersController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const existingUserEmail = await this.usersService.findOne(user.email);
+    const existingUserEmail = await this.usersService.findOneByEmail(
+      user.email,
+    );
     if (existingUserEmail) {
       throw new HttpException(`Email already in use`, HttpStatus.BAD_REQUEST);
     }
-
-    const createdUser = await this.usersService.createUser(user);
+    const newUser = user;
+    newUser.password = await this.usersService.hashPassword(newUser.password);
+    const createdUser = await this.usersService.createUser(newUser);
     return createdUser;
   }
 
@@ -50,7 +53,6 @@ export class UsersController {
   @Put('delete')
   @UseGuards(AuthGuard)
   async deleteData(@Req() request: Request, @Body() articleId: any) {
-    console.log(articleId);
     return this.usersService.deleteArticle(
       request['user'].username,
       articleId.articleId,

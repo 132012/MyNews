@@ -3,20 +3,27 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { SavedArticleDocument, User } from './users.schema';
 import { of } from 'rxjs';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
   constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
 
-  async createUser(user: User): Promise<User> {
-    console.log(user);
+  async createUser(user: User): Promise<any> {
     const newUser = new this.userModel(user);
     const result = await newUser.save();
-    return result;
+    return {
+      code: 200,
+      message: `User ${result.username} created successfully`,
+    };
   }
 
   async findOne(username: string): Promise<User | undefined> {
     return this.userModel.findOne({ username }).exec();
+  }
+
+  async findOneByEmail(email: string): Promise<User | null> {
+    return await this.userModel.findOne({ email }).exec();
   }
 
   async addArticle(
@@ -59,5 +66,11 @@ export class UsersService {
     }
     const toReturn = existingUser.savedArticles;
     return Promise.resolve(toReturn);
+  }
+
+  async hashPassword(password: string): Promise<string> {
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    return hashedPassword;
   }
 }

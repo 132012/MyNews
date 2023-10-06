@@ -8,7 +8,6 @@ export class NewsService {
   constructor(private readonly httpService: HttpService) {}
   getNews(query): Observable<any> {
     const string = this.getCallString(query);
-    console.log(string);
     return this.httpService
       .get(`https://newsapi.org/v2/everything?${string}&apiKey=${this.url}`)
       .pipe(map((response) => response.data));
