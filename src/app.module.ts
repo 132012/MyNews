@@ -7,15 +7,13 @@ import { NewsService } from './news/news.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AuthMiddleware } from './auth/auth.middleware';
-
 import * as dotenv from 'dotenv'; // Import dotenv
 
 dotenv.config();
 
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.DB_URL),
+    MongooseModule.forRoot(`${process.env.DB_URL}`),
     HttpModule,
     AuthModule,
     UsersModule,
