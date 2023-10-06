@@ -9,12 +9,13 @@ import { UsersModule } from './users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthMiddleware } from './auth/auth.middleware';
 
+import * as dotenv from 'dotenv'; // Import dotenv
+
+dotenv.config();
 
 @Module({
   imports: [
-    MongooseModule.forRoot(
-      'mongodb+srv://juvenalguerrag:A8XvrBRsX8gxKbM3@newsapp.6hmat9d.mongodb.net/?retryWrites=true&w=majority',
-    ),
+    MongooseModule.forRoot(process.env.DB_URL),
     HttpModule,
     AuthModule,
     UsersModule,
